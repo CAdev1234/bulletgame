@@ -28,6 +28,15 @@ button.lottieBtn {
     border: none;
 }
 
+button.gradientBtn {
+    padding: 10px;
+    font-size: 15px;
+    font-weight: 600;
+    color: white;
+    border-radius: 10px;
+    background: linear-gradient(90deg, rgba(202, 200, 231, 1) 1%, rgba(64, 139, 153, 1) 40%, rgba(0, 255, 231, 1) 99%);
+}
+
 .playerStat {
     position: absolute;
     top: 10px;

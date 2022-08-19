@@ -90,7 +90,7 @@ const GameModal = ({
                 <Lottie options={lostOption} height={250} width={250} />
                 <br /><br /><br />
                 <Button 
-                    lottieItem={<Lottie options={restartOption} height={50} width={50} />}
+                    lottieItem={<Lottie options={restartOption} height={90} width={90} />}
                     type="lottie"
                     onClick={restartGame}
                 />

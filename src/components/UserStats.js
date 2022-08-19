@@ -1,12 +1,25 @@
 import PropTypes from 'prop-types';
 import { User } from '../types/Game';
+import { useEffect } from 'react';
+import Helper from '../lib/Common';
+import Button from './Button';
 const UserStats = ({
-    user
+    user,
+    onConnect,
+    onDisconnect
 }) => {
+    const connect =() => {
+        onConnect();
+    }
+    const disconnect = () => {
+        onDisconnect();
+    }
     return (
         <>
             <div className="playerStat">
-                <h3>Account: {user.account}</h3>
+                {user.account && <h3>Account: {Helper.ellipseAddress(user.account)}</h3>}
+                {user.account && <Button type="gradient" label="Disconnect" onClick={() => {disconnect()}} />}
+                {!user.account && <Button type="gradient" label="Wallet Connect" onClick={() => {connect()}} />}
                 <h3>Level: {user.level}</h3>
                 <h3>Score: {user.score}</h3>
             </div>
@@ -14,6 +27,8 @@ const UserStats = ({
     )
 }
 UserStats.prototype = {
-    user: PropTypes.shape(User)
+    user: PropTypes.shape(User),
+    onConnect: PropTypes.func.isRequired,
+    onDisconnect: PropTypes.func.isRequired,
 }
 export default UserStats;

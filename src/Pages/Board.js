@@ -1,6 +1,9 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, useContext } from "react";
 import gsap from "gsap";
 import Confetti from 'react-confetti';
+// import {bscWalletContext} from "../contexts/bscWalletContext"
+import { useWeb3React } from '@web3-react/core';
+import { injected } from '../components/wallet/connectors';
 import Bullet from "../util/Bullet";
 import Enemy from "../util/Enemy";
 import Player from "../util/Player";
@@ -8,6 +11,8 @@ import UserStats from "../components/UserStats";
 import { GAME_SETTING } from "../constants/Game";
 import GameModal from "../components/GameModal";
 import { GameStatus } from "../types/Game";
+import storage, {StorageType} from "../lib/storage";
+import { STORAGE_KEY } from "../constants/Storage";
 
 const Board = () => {
     const canvasRef = useRef(null);
@@ -17,12 +22,34 @@ const Board = () => {
     let animationId;
     let createEnemyInterval;
 
-    const [user, setUser] = useState({account: 'aaaaaaaaaaa', score: 0, level: 1});
+    const [user, setUser] = useState({account: null, score: 0, level: 1});
     const [status, setStatus] = useState(GameStatus.Init)
+    const {active, account, library, connector, activate, deactivate } = useWeb3React();
+    const connect = async() => {
+        try {
+            await activate(injected);
+            if (account) {
+                storage.rcSetItem(StorageType.local, STORAGE_KEY.IS_WALLET_CONNECTED, true);
+                setUser(prev => ({...prev, account: account}));
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    const disconnect = async() => {
+        try {
+            deactivate();
+            setUser(prev => ({...prev, account: null}));
+            storage.rcSetItem(StorageType.local, STORAGE_KEY.IS_WALLET_CONNECTED, false);
+            initGame()
+        } catch (error) {
+            console.log(error)
+        }
+    }
     
     const createPlayer = (canvas) => {
         player = new Player(canvas, canvas.width / 2, canvas.height / 2, 10, 'white');
-    };
+    }
     const createEnemy = (canvas) => {
         let numEnemyGenerated = 0;
         createEnemyInterval = setInterval(() => {
@@ -50,7 +77,7 @@ const Board = () => {
                 clearInterval(createEnemyInterval);
             }
         }, GAME_SETTING.level[user.level - 1].enemyGenerateTime)
-    };
+    }
     const createBullet = (canvas, event) => {
         const angle = Math.atan2(event.clientY - canvas.height / 2, event.clientX - canvas.width / 2)
         const velocity = {
@@ -58,7 +85,7 @@ const Board = () => {
             y: Math.sin(angle) * 5
         }
         bullets.push(new Bullet(canvas, canvas.width / 2, canvas.height / 2, 5, 'white', velocity))
-    };
+    }
     const animate = () => {
         animationId = requestAnimationFrame(animate);
         let canvas = document.querySelector("canvas");
@@ -121,9 +148,16 @@ const Board = () => {
                 }, 0)
             }
         })
-    };
+    }
 
+    const initGame = () => {
+        window.location.reload();
+    }
     const startGame = () => {
+        if (!user.account) {
+            connect();
+            return
+        };
         let canvas = canvasRef.current;
         canvas.width = window.innerWidth;
         canvas.height = window.innerHeight;
@@ -151,22 +185,26 @@ const Board = () => {
         restartGame()
     }
     useEffect(() => {
-        // let canvas = canvasRef.current;
-        // canvas.width = window.innerWidth;
-        // canvas.height = window.innerHeight;
-        // createPlayer(canvas);
-        // createEnemy(canvas);
-        // animate();
-        // canvas.addEventListener('click', (evt) => {
-        //     createBullet(canvas, evt)
-        // })
-        // return () => {
-        //     canvas.removeEventListener('click')
-        // }
-    }, []);
+        const connectWalletOnPageLoad = async () => {
+            if (storage.rcGetItem(StorageType.local, STORAGE_KEY.IS_WALLET_CONNECTED)) {
+              try {
+                await activate(injected);
+                storage.rcSetItem(StorageType.local, STORAGE_KEY.IS_WALLET_CONNECTED, true);
+                setUser(prev => ({...prev, account: account}));
+              } catch (ex) {
+                console.log(ex)
+              }
+            }
+        }
+        connectWalletOnPageLoad()
+    }, [])
     return (
         <>
-            <UserStats user={user} />
+            <UserStats
+                user={user}
+                onConnect={connect}
+                onDisconnect={disconnect}
+            />
             <canvas ref={canvasRef} />
 
             {(status === GameStatus.Init || status === GameStatus.Next || status === GameStatus.Lost || status === GameStatus.Win) &&  

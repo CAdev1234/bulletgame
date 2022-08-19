@@ -1,19 +1,9 @@
 class _Helper {
     constructor() {}
     checkNull = val => val === null || val === undefined
-    truncateString = (
-        longString,
-        startChunk,
-        endChunk
-    ) => {
-
-        if (!longString) return;
-        return (
-            longString.substring(0, startChunk) +
-            '...' +
-            longString.substring(longString.length - endChunk)
-        );
-    };
+    ellipseAddress(address = "", width = 10) {
+        return `${address.slice(0, width)}...${address.slice(-width)}`;
+    }
 }
 
 const Helper = new _Helper();
