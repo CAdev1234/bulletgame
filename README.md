@@ -11,3 +11,9 @@ yarn install
 ```sh
 yarn start
 ```
+
+### Build
+
+```sh
+yarn build
+```
