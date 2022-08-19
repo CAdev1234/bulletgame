@@ -4,15 +4,15 @@ import Confetti from 'react-confetti';
 // import {bscWalletContext} from "../contexts/bscWalletContext"
 import { useWeb3React } from '@web3-react/core';
 import { injected } from '../components/wallet/connectors';
-import Bullet from "../util/Bullet";
-import Enemy from "../util/Enemy";
-import Player from "../util/Player";
-import UserStats from "../components/UserStats";
-import { GAME_SETTING } from "../constants/Game";
-import GameModal from "../components/GameModal";
-import { GameStatus } from "../types/Game";
+import Bullet from "../util/bullet";
+import Enemy from "../util/enemy";
+import Player from "../util/player";
+import UserStats from "../components/userStats";
+import { GAME_SETTING } from "../constants/game";
+import GameModal from "../components/gameModal";
+import { GameStatus } from "../types/game";
 import storage, {StorageType} from "../lib/storage";
-import { STORAGE_KEY } from "../constants/Storage";
+import { STORAGE_KEY } from "../constants/storage";
 
 const Board = () => {
     const canvasRef = useRef(null);

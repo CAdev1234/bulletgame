@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import Board from "./Pages/Board";
+import Board from "./Pages/board";
 import { Web3ReactProvider } from '@web3-react/core'
 import {ethers} from 'ethers';
 

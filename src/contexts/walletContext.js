@@ -5,7 +5,7 @@ import WalletConnect from "@walletconnect/client";
 import QRCodeModal from "@walletconnect/qrcode-modal";
 import { Connectors } from 'web3-react';
 import Helper from "../lib/common";
-import { CHAIN_DATA } from '../constants/Crypto';
+import { CHAIN_DATA } from '../constants/crypto';
 
 
 export const customWalletContext = createContext()

@@ -1,8 +1,8 @@
 import PropTypes from 'prop-types';
-import { User } from '../types/Game';
+import { User } from '../types/game';
 import { useEffect } from 'react';
-import Helper from '../lib/Common';
-import Button from './Button';
+import Helper from '../lib/common';
+import Button from './customButton';
 const UserStats = ({
     user,
     onConnect,

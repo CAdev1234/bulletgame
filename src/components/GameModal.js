@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
-import Button from './Button';
-import { GameStatus, User } from '../types/Game';
-import RestartData from '../lottie/Restart.json';
-import PlayData from '../lottie/Player.json';
-import NewGamingData from '../lottie/NewGaming.json';
-import WinnerData from '../lottie/Winner.json';
-import GetGoldData from '../lottie/GetGold.json';
-import CryingData from '../lottie/Crying.json';
+import Button from './customButton';
+import { GameStatus, User } from '../types/game';
+import RestartData from '../lottie/restart.json';
+import PlayData from '../lottie/player.json';
+import NewGamingData from '../lottie/newGaming.json';
+import WinnerData from '../lottie/winner.json';
+import GetGoldData from '../lottie/getGold.json';
+import CryingData from '../lottie/crying.json';
 const GameModal = ({
     type,
     user,
