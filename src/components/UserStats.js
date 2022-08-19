@@ -1,16 +1,22 @@
 import PropTypes from 'prop-types';
+import useSound from 'use-sound';
 import { User } from '../types/game';
 import Helper from '../lib/common';
 import Button from './customButton';
+import btnClickAudio from '../assets/audio/btnClick.wav';
+
 const UserStats = ({
     user,
     onConnect,
     onDisconnect
 }) => {
+    const [btnClickPlay] = useSound(btnClickAudio);
     const connect =() => {
+        btnClickPlay();
         onConnect();
     }
     const disconnect = () => {
+        btnClickPlay();
         onDisconnect();
     }
     return (

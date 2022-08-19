@@ -3,6 +3,7 @@ import gsap from "gsap";
 import Confetti from 'react-confetti';
 import { useWeb3React } from '@web3-react/core';
 import { injected } from '../components/wallet/connectors';
+import useSound from 'use-sound';
 import Bullet from "../util/bullet";
 import Enemy from "../util/enemy";
 import Player from "../util/player";
@@ -12,6 +13,9 @@ import GameModal from "../components/gameModal";
 import { GameStatus } from "../types/game";
 import storage, {StorageType} from "../lib/storage";
 import { STORAGE_KEY } from "../constants/storage";
+import shootingAudio from "../assets/audio/shooting.wav";
+import explodeAudio from "../assets/audio/explode.mp3";
+import winAudio from "../assets/audio/win.wav";
 
 const Board = () => {
     const canvasRef = useRef(null);
@@ -24,6 +28,9 @@ const Board = () => {
     const [user, setUser] = useState({account: null, score: 0, level: 1});
     const [status, setStatus] = useState(GameStatus.Init)
     const {active, account, library, connector, activate, deactivate } = useWeb3React();
+    const [shootingPlay] = useSound(shootingAudio);
+    const [explodePlay] = useSound(explodeAudio);
+    const [winPlay] = useSound(winAudio);
     const connect = async() => {
         try {
             await activate(injected);
@@ -101,11 +108,13 @@ const Board = () => {
                 window.cancelAnimationFrame(animationId);
                 clearInterval(createEnemyInterval);
                 setStatus(GameStatus.Lost);
+                explodePlay();
             }
             bullets.forEach((bullet, bulletIdx) => {
                 const dist = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
                 // When the bullets touch the enemy 
                 if (dist - enemy.radius - bullet.radius < 1) {
+                    explodePlay();
                     if (enemy.radius - 10 > 5) {
                         // Scoring enemy damaged
                         setUser(prev => ({...prev, score: prev.score + GAME_SETTING.damageScore}));
@@ -125,6 +134,7 @@ const Board = () => {
                             // Completed game level and go next level
                             if (enemies.length === 0) {
                                 setStatus(GameStatus.Next);
+                                winPlay()
                             }
                         }, 0)
                     }
@@ -143,7 +153,10 @@ const Board = () => {
     }
 
     const initGame = () => {
-        window.location.reload();
+        setTimeout(() => {
+            window.location.reload();
+        }, 1000);
+        
     }
     const startGame = () => {
         if (!user.account) {
@@ -157,7 +170,8 @@ const Board = () => {
         createEnemy(canvas);
         animate();
         canvas.addEventListener('click', (evt) => {
-            createBullet(canvas, evt)
+            shootingPlay();
+            createBullet(canvas, evt);
         })
         setStatus(GameStatus.Start)
     }
@@ -168,6 +182,7 @@ const Board = () => {
     const startNextGameLevel = () => {
         if (user.level === 3) {
             setStatus(GameStatus.Win)
+            winPlay();
             return
         }
         setUser(prev => ({...prev, level: prev.level + 1}))

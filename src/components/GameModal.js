@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Lottie from 'react-lottie';
+import useSound from 'use-sound';
 import Button from './customButton';
 import { GameStatus, User } from '../types/game';
 import RestartData from '../lottie/restart.json';
@@ -9,6 +10,8 @@ import NewGamingData from '../lottie/newGaming.json';
 import WinnerData from '../lottie/winner.json';
 import GetGoldData from '../lottie/getGold.json';
 import CryingData from '../lottie/crying.json';
+import clickAudio from "../assets/audio/click.wav";
+
 const GameModal = ({
     type,
     user,
@@ -17,6 +20,7 @@ const GameModal = ({
     onNext,
     onWin,
 }) => {
+    const [clickPlay] = useSound(clickAudio);
     const lostOption = {
         loop: true,
         autoPlay: true,
@@ -67,15 +71,19 @@ const GameModal = ({
     }
 
     const startGame = () => {
+        clickPlay();
         onStart();
     }
     const restartGame = () => {
+        clickPlay();
         onRestart()
     }
     const nextLevel = () => {
+        clickPlay();
         onNext();
     }
     const winGame = () => {
+        clickPlay();
         onWin();
     }
      
