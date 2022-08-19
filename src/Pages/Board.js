@@ -16,6 +16,7 @@ import { STORAGE_KEY } from "../constants/storage";
 import shootingAudio from "../assets/audio/shooting.wav";
 import explodeAudio from "../assets/audio/explode.mp3";
 import winAudio from "../assets/audio/win.wav";
+import lostAudio from "../assets/audio/lost.mp3";
 
 const Board = () => {
     const canvasRef = useRef(null);
@@ -31,6 +32,7 @@ const Board = () => {
     const [shootingPlay] = useSound(shootingAudio);
     const [explodePlay] = useSound(explodeAudio);
     const [winPlay] = useSound(winAudio);
+    const [lostPlay] = useSound(lostAudio);
     const connect = async() => {
         try {
             await activate(injected);
@@ -109,6 +111,7 @@ const Board = () => {
                 clearInterval(createEnemyInterval);
                 setStatus(GameStatus.Lost);
                 explodePlay();
+                lostPlay();
             }
             bullets.forEach((bullet, bulletIdx) => {
                 const dist = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
