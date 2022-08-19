@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import { User } from '../types/game';
-import { useEffect } from 'react';
 import Helper from '../lib/common';
 import Button from './customButton';
 const UserStats = ({

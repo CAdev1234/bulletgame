@@ -1,7 +1,6 @@
-import { useEffect, useRef, useState, useContext } from "react";
+import { useEffect, useRef, useState } from "react";
 import gsap from "gsap";
 import Confetti from 'react-confetti';
-// import {bscWalletContext} from "../contexts/bscWalletContext"
 import { useWeb3React } from '@web3-react/core';
 import { injected } from '../components/wallet/connectors';
 import Bullet from "../util/bullet";
@@ -107,13 +106,6 @@ const Board = () => {
                 const dist = Math.hypot(bullet.x - enemy.x, bullet.y - enemy.y);
                 // When the bullets touch the enemy 
                 if (dist - enemy.radius - bullet.radius < 1) {
-                    //creating explosions
-                    // for (let i = 0; i < enemy.radius * 2; i++) {
-                    //     bullets.push(new Particle(bullet.x, bullet.y, Math.random() * 2, enemy.color, {
-                    //         x: (Math.random() - 0.5) * (Math.random() * 6),
-                    //         y: (Math.random() - 0.5) * (Math.random() * 6),
-                    //     }))
-                    // }
                     if (enemy.radius - 10 > 5) {
                         // Scoring enemy damaged
                         setUser(prev => ({...prev, score: prev.score + GAME_SETTING.damageScore}));
@@ -170,7 +162,7 @@ const Board = () => {
         setStatus(GameStatus.Start)
     }
     const restartGame = () => {
-        setUser(prev => ({...user, score: 0, level: 1}));
+        setUser(prev => ({...prev, score: 0, level: 1}));
         startGame()
     }
     const startNextGameLevel = () => {
@@ -206,7 +198,6 @@ const Board = () => {
                 onDisconnect={disconnect}
             />
             <canvas ref={canvasRef} />
-
             {(status === GameStatus.Init || status === GameStatus.Next || status === GameStatus.Lost || status === GameStatus.Win) &&  
             <GameModal 
                 onRestart={restartGame}
@@ -217,7 +208,6 @@ const Board = () => {
                 user={user}
             />
             }
-
             {status === GameStatus.Win && <Confetti id="confettiCanvas" />}
         </>
     );
